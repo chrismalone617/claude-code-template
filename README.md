@@ -3,6 +3,7 @@
 <div align="center">
 
 [![Use this template](https://img.shields.io/badge/Use%20this%20template-2ea44f?style=for-the-badge&logo=github)](https://github.com/chrismalone617/claude-code-template/generate)
+[![Validate Template](https://github.com/chrismalone617/claude-code-template/actions/workflows/validate-template.yml/badge.svg)](https://github.com/chrismalone617/claude-code-template/actions/workflows/validate-template.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 [![GitHub stars](https://img.shields.io/github/stars/chrismalone617/claude-code-template?style=flat-square)](https://github.com/chrismalone617/claude-code-template/stargazers)
 
