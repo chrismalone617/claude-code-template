@@ -1,0 +1,237 @@
+{
+  "$schema": "https://modelcontextprotocol.io/schema/mcp.schema.json",
+  "mcpServers": {
+    "_comment_github": "GitHub integration - issues, PRs, repos, search",
+    "github": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "_comment": "Create token at https://github.com/settings/tokens with repo scope",
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
+      }
+    },
+
+    "_comment_filesystem": "Filesystem access - read/write/search files",
+    "filesystem": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/path/to/allowed/directory"],
+      "_note": "Restrict to specific directories for security. Can specify multiple paths.",
+      "_security": "Only grant access to directories that Claude should modify"
+    },
+
+    "_comment_postgres": "PostgreSQL database access - queries, schema inspection",
+    "postgres": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-postgres", "${DATABASE_URL}"],
+      "env": {
+        "_comment": "Format: postgresql://user:password@host:port/database",
+        "DATABASE_URL": "${DATABASE_URL}"
+      },
+      "_security": "Use read-only database user if possible",
+      "_note": "Supports schema inspection and SQL queries"
+    },
+
+    "_comment_sequential_thinking": "Enhanced reasoning for complex problems",
+    "sequential-thinking": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"],
+      "_note": "No configuration required. Enables extended thinking mode.",
+      "_use_case": "Helpful for complex debugging, architecture decisions, algorithmic problems"
+    },
+
+    "_comment_brave_search": "Web search via Brave Search API",
+    "brave-search": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-brave-search"],
+      "env": {
+        "_comment": "Get API key from https://brave.com/search/api/",
+        "BRAVE_API_KEY": "${BRAVE_API_KEY}"
+      },
+      "_note": "Free tier: 2000 queries/month"
+    },
+
+    "_comment_puppeteer": "Browser automation - screenshots, scraping, testing",
+    "puppeteer": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-puppeteer"],
+      "_note": "Enables Claude to control a browser",
+      "_use_cases": ["Take screenshots", "Test web UI", "Scrape dynamic content", "Automate browser tasks"],
+      "_requirements": "Chrome/Chromium must be installed"
+    },
+
+    "_comment_slack": "Slack integration - send messages, read channels",
+    "slack": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-slack"],
+      "env": {
+        "_comment": "Create bot at https://api.slack.com/apps",
+        "SLACK_BOT_TOKEN": "${SLACK_BOT_TOKEN}",
+        "SLACK_TEAM_ID": "${SLACK_TEAM_ID}"
+      },
+      "_required_scopes": ["channels:history", "channels:read", "chat:write", "users:read"]
+    },
+
+    "_comment_memory": "Long-term memory for Claude across sessions",
+    "memory": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-memory"],
+      "_note": "Stores knowledge graphs that persist across Claude sessions",
+      "_use_cases": ["Remember project context", "Store user preferences", "Build knowledge over time"]
+    },
+
+    "_comment_sqlite": "SQLite database access",
+    "sqlite": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-sqlite", "/path/to/database.db"],
+      "_note": "Simpler alternative to PostgreSQL for local databases"
+    },
+
+    "_comment_google_drive": "Google Drive integration",
+    "google-drive": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-google-drive"],
+      "env": {
+        "_comment": "OAuth credentials from Google Cloud Console",
+        "GOOGLE_CLIENT_ID": "${GOOGLE_CLIENT_ID}",
+        "GOOGLE_CLIENT_SECRET": "${GOOGLE_CLIENT_SECRET}",
+        "GOOGLE_REFRESH_TOKEN": "${GOOGLE_REFRESH_TOKEN}"
+      },
+      "_setup": "Requires OAuth 2.0 setup via Google Cloud Console"
+    },
+
+    "_comment_git": "Git operations - commit, branch, merge, status",
+    "git": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-git"],
+      "_note": "Enhanced git operations beyond basic bash commands",
+      "_use_cases": ["Complex git workflows", "Repository analysis", "Automated git operations"]
+    },
+
+    "_comment_fetch": "HTTP requests with caching and rate limiting",
+    "fetch": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-fetch"],
+      "_note": "Alternative to WebFetch tool with more control",
+      "_features": ["Request caching", "Rate limiting", "Custom headers", "Proxy support"]
+    },
+
+    "_comment_aws_kb": "AWS Knowledge Base integration (Bedrock)",
+    "aws-kb": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-aws-kb"],
+      "env": {
+        "AWS_ACCESS_KEY_ID": "${AWS_ACCESS_KEY_ID}",
+        "AWS_SECRET_ACCESS_KEY": "${AWS_SECRET_ACCESS_KEY}",
+        "AWS_REGION": "${AWS_REGION}",
+        "AWS_KB_ID": "${AWS_KB_ID}"
+      },
+      "_note": "Query AWS Knowledge Bases powered by Bedrock"
+    },
+
+    "_comment_docker": "Docker container management",
+    "docker": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-docker"],
+      "_note": "Requires Docker daemon running",
+      "_capabilities": ["List containers", "Start/stop containers", "View logs", "Execute commands"]
+    },
+
+    "_comment_custom_local": "EXAMPLE: Custom local MCP server",
+    "my-custom-server": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["/path/to/your/mcp-server.js"],
+      "env": {
+        "CUSTOM_API_KEY": "${CUSTOM_API_KEY}"
+      },
+      "_note": "Example of running a custom MCP server you've built",
+      "_docs": "See https://modelcontextprotocol.io/docs/building-servers"
+    },
+
+    "_comment_custom_api": "EXAMPLE: Custom API via HTTP/SSE",
+    "my-api-server": {
+      "type": "sse",
+      "url": "https://your-mcp-server.example.com/sse",
+      "headers": {
+        "Authorization": "Bearer ${API_TOKEN}"
+      },
+      "_note": "Example of connecting to a remote MCP server via SSE"
+    },
+
+    "_comment_python_server": "EXAMPLE: Python-based MCP server",
+    "my-python-server": {
+      "type": "stdio",
+      "command": "python",
+      "args": ["-m", "your_mcp_package"],
+      "env": {
+        "PYTHONPATH": "${PYTHONPATH}:/path/to/your/package"
+      },
+      "_note": "Example of running a Python MCP server"
+    },
+
+    "_comment_everything": "EXAMPLE: Everything MCP (comprehensive file ops)",
+    "everything": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-everything"],
+      "_note": "Comprehensive file operations (experimental)",
+      "_warning": "More powerful but less restricted than filesystem server"
+    }
+  },
+
+  "_documentation": {
+    "_overview": "Model Context Protocol (MCP) servers extend Claude's capabilities",
+    "_official_servers": "https://github.com/modelcontextprotocol/servers",
+    "_community_servers": "https://github.com/punkpeye/awesome-mcp-servers",
+    "_building_custom": "https://modelcontextprotocol.io/docs/building-servers",
+    "_server_types": {
+      "stdio": "Local process communication via stdin/stdout",
+      "sse": "Remote server via Server-Sent Events (HTTP)",
+      "streamingHttp": "Remote server via streaming HTTP"
+    },
+    "_environment_variables": {
+      "_note": "Use ${VAR_NAME} syntax to reference environment variables",
+      "_security": "NEVER commit secrets to git. Always use environment variables.",
+      "_setup": "Create .env file or export variables in your shell"
+    },
+    "_tips": [
+      "Start with official servers before building custom ones",
+      "Use filesystem server restricted to project directory only",
+      "Test MCP servers locally before deploying",
+      "Each server runs as a separate process",
+      "Servers can be enabled/disabled by commenting them out",
+      "Use descriptive names for custom servers",
+      "Document required environment variables",
+      "Consider security implications of each server"
+    ]
+  },
+
+  "_quick_start": {
+    "1_choose_servers": "Uncomment the servers you want to use above",
+    "2_set_env_vars": "Create .env file or export required environment variables",
+    "3_test": "Run 'claude' and verify servers are loaded",
+    "4_customize": "Add your own custom servers as needed"
+  },
+
+  "_common_combinations": {
+    "web_development": ["github", "filesystem", "postgres", "puppeteer"],
+    "data_analysis": ["postgres", "sqlite", "filesystem", "memory"],
+    "automation": ["puppeteer", "slack", "github", "filesystem"],
+    "research": ["brave-search", "memory", "fetch", "filesystem"],
+    "devops": ["docker", "github", "filesystem", "slack"]
+  }
+}

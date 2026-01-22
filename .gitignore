@@ -1,0 +1,37 @@
+# Personal settings and local overrides
+.claude/settings.local.json
+CLAUDE.local.md
+
+# Environment variables and secrets
+.env
+.env.local
+.env.*.local
+
+# MCP local configuration
+.mcp.local.json
+
+# Personal rules (optional - uncomment to exclude)
+# .claude/rules/personal/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+logs/
+
+# Node modules (if using npm for MCP servers)
+node_modules/
+
+# Python virtual environments
+venv/
+env/
+.venv/

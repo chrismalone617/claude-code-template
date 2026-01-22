@@ -1,0 +1,88 @@
+{
+  "$schema": "https://claude.ai/schema/settings.json",
+  "description": "Shared Claude Code settings for this project",
+
+  "permissions": {
+    "allowedCommands": {
+      "bash": [
+        "npm",
+        "npx",
+        "yarn",
+        "pnpm",
+        "git",
+        "docker",
+        "docker-compose",
+        "pytest",
+        "python",
+        "node",
+        "go",
+        "cargo",
+        "make"
+      ]
+    },
+    "blockedPaths": [
+      ".env",
+      ".env.local",
+      "**/.env.*",
+      "secrets/**",
+      "**/*secret*",
+      "**/*password*",
+      "**/node_modules/**"
+    ]
+  },
+
+  "hooks": {
+    "_comment": "Hooks are shell commands executed at specific points",
+    "_examples": {
+      "afterEdit": ".claude/hooks/examples/format-on-save.sh",
+      "afterWrite": ".claude/hooks/examples/test-runner.sh",
+      "beforeCommit": ".claude/hooks/pre-commit.sh"
+    },
+    "_note": "Uncomment and customize hooks as needed"
+  },
+
+  "sandbox": {
+    "_comment": "Sandbox mode restricts Claude's access for safety",
+    "enabled": false,
+    "_note": "Set to true to enable sandboxing (restricts file system access)"
+  },
+
+  "attribution": {
+    "_comment": "Add attribution in git commits",
+    "enabled": true,
+    "format": "Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>"
+  },
+
+  "rules": {
+    "_comment": "Rules configuration",
+    "paths": [
+      ".claude/rules/**/*.md"
+    ],
+    "_note": "Rules are automatically loaded from .claude/rules/"
+  },
+
+  "skills": {
+    "_comment": "Skills configuration",
+    "paths": [
+      ".claude/skills/**/*.md"
+    ],
+    "_note": "Skills are automatically loaded from .claude/skills/"
+  },
+
+  "_documentation": {
+    "_settings_hierarchy": "settings.local.json > settings.json > defaults",
+    "_use_settings_local_json_for": "Personal overrides that shouldn't be committed",
+    "_hooks_available": [
+      "beforeRead",
+      "afterRead",
+      "beforeWrite",
+      "afterWrite",
+      "beforeEdit",
+      "afterEdit",
+      "beforeCommit",
+      "afterCommit",
+      "beforePush",
+      "afterPush"
+    ]
+  }
+}
