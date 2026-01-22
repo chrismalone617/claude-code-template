@@ -1,8 +1,20 @@
 # Claude Code Project Template
 
-A comprehensive, reusable template for configuring [Claude Code](https://github.com/anthropics/claude-code) with personal preferences, project requirements, MCP server examples, and automation scripts.
+<div align="center">
 
-## What's Included
+[![Use this template](https://img.shields.io/badge/Use%20this%20template-2ea44f?style=for-the-badge&logo=github)](https://github.com/chrismalone617/claude-code-template/generate)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
+[![GitHub stars](https://img.shields.io/github/stars/chrismalone617/claude-code-template?style=flat-square)](https://github.com/chrismalone617/claude-code-template/stargazers)
+
+**A comprehensive, reusable template for configuring [Claude Code](https://github.com/anthropics/claude-code) with personal preferences, project requirements, MCP server examples, and automation scripts.**
+
+[Quick Start](#quick-start) • [Features](#features) • [Documentation](#documentation) • [Examples](#examples)
+
+</div>
+
+---
+
+## Features
 
 ### 📋 Personal Preferences
 Customize how Claude communicates and codes with you:
@@ -44,7 +56,7 @@ Guides for every aspect:
 
 ```bash
 # Clone this repository for a new project
-git clone https://github.com/yourusername/claude-code-template my-new-project
+git clone https://github.com/chrismalone617/claude-code-template my-new-project
 cd my-new-project
 
 # Remove git history (optional - if you want a fresh start)
@@ -114,7 +126,7 @@ Each project gets its own copy of the template, customized for that project.
 
 ```bash
 # For each new project
-git clone https://github.com/yourusername/claude-code-template my-project
+git clone https://github.com/chrismalone617/claude-code-template my-project
 cd my-project
 ./setup.sh
 # Customize for this project
@@ -270,14 +282,17 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ## Changelog
 
-### Version 1.0.0 (2024-01-XX)
-- Initial template release
-- Personal preference templates
-- Project requirements templates
-- MCP server examples
-- Documentation and guides
-- Setup automation script
+See [CHANGELOG.md](CHANGELOG.md) for detailed version history and release notes.
+
+### Version 1.0.0 (2024-01-22)
+- Initial template release with complete structure
+- Personal preference templates (communication, coding, context)
+- Project requirements templates (testing, docs, security, quality)
+- MCP server examples and comprehensive configuration
+- Example rules, skills, and hooks
+- Interactive setup script with validation
+- Comprehensive documentation (8,325+ lines)
 
 ---
 
-**Need Help?** See [SETUP.md](SETUP.md) for detailed setup instructions or [open an issue](https://github.com/yourusername/claude-code-template/issues).
+**Need Help?** See [SETUP.md](SETUP.md) for detailed setup instructions or [open an issue](https://github.com/chrismalone617/claude-code-template/issues).

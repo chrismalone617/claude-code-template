@@ -20,7 +20,7 @@ If you cloned the template from a Git repository:
 
 ```bash
 # Add template as a remote (if not already added)
-git remote add template https://github.com/yourusername/claude-code-template.git
+git remote add template https://github.com/chrismalone617/claude-code-template.git
 
 # Fetch updates from template
 git fetch template
@@ -110,14 +110,14 @@ Use git subtree for shared configuration:
 # Add template as subtree
 git subtree add \
   --prefix=.claude-template \
-  https://github.com/yourusername/claude-code-template.git \
+  https://github.com/chrismalone617/claude-code-template.git \
   main \
   --squash
 
 # Update template
 git subtree pull \
   --prefix=.claude-template \
-  https://github.com/yourusername/claude-code-template.git \
+  https://github.com/chrismalone617/claude-code-template.git \
   main \
   --squash
 

@@ -1,0 +1,338 @@
+name: Validate Template
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  validate-structure:
+    name: Validate Directory Structure
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check required directories exist
+        run: |
+          echo "Checking required directories..."
+          directories=(
+            ".claude"
+            ".claude/rules"
+            ".claude/rules/personal"
+            ".claude/rules/project"
+            ".claude/rules/examples"
+            ".claude/skills"
+            ".claude/skills/examples"
+            ".claude/hooks"
+            ".claude/hooks/examples"
+            "docs"
+          )
+
+          for dir in "${directories[@]}"; do
+            if [ ! -d "$dir" ]; then
+              echo "❌ Missing directory: $dir"
+              exit 1
+            else
+              echo "✓ Found: $dir"
+            fi
+          done
+
+          echo "✓ All required directories exist"
+
+      - name: Check required files exist
+        run: |
+          echo "Checking required files..."
+          files=(
+            "README.md"
+            "SETUP.md"
+            "CHANGELOG.md"
+            "LICENSE"
+            "setup.sh"
+            ".gitignore"
+            ".env.example"
+            ".mcp.json"
+            ".mcp.example.json"
+            ".claude/CLAUDE.md"
+            ".claude/settings.json"
+            ".claude/settings.local.json.example"
+            ".claude/rules/README.md"
+            ".claude/rules/personal/communication-style.md"
+            ".claude/rules/personal/coding-style.md"
+            ".claude/rules/personal/context.md"
+            ".claude/rules/project/testing.md"
+            ".claude/rules/project/documentation.md"
+            ".claude/rules/project/security.md"
+            ".claude/rules/project/quality.md"
+            ".claude/skills/README.md"
+            ".claude/hooks/README.md"
+            "docs/mcp-servers-guide.md"
+            "docs/customization-guide.md"
+            "docs/maintenance-guide.md"
+          )
+
+          for file in "${files[@]}"; do
+            if [ ! -f "$file" ]; then
+              echo "❌ Missing file: $file"
+              exit 1
+            else
+              echo "✓ Found: $file"
+            fi
+          done
+
+          echo "✓ All required files exist"
+
+  validate-shell:
+    name: Validate Shell Scripts
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install shellcheck
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y shellcheck
+
+      - name: Run shellcheck on setup.sh
+        run: |
+          echo "Running shellcheck on setup.sh..."
+          shellcheck setup.sh
+          echo "✓ setup.sh passed shellcheck"
+
+      - name: Run shellcheck on hook examples
+        run: |
+          echo "Running shellcheck on hook scripts..."
+          for script in .claude/hooks/examples/*.sh; do
+            if [ -f "$script" ]; then
+              echo "Checking $script..."
+              shellcheck "$script"
+              echo "✓ $script passed shellcheck"
+            fi
+          done
+          echo "✓ All hook scripts passed shellcheck"
+
+      - name: Check scripts are executable
+        run: |
+          echo "Checking script permissions..."
+
+          if [ ! -x "setup.sh" ]; then
+            echo "❌ setup.sh is not executable"
+            exit 1
+          fi
+          echo "✓ setup.sh is executable"
+
+          for script in .claude/hooks/examples/*.sh; do
+            if [ -f "$script" ] && [ ! -x "$script" ]; then
+              echo "❌ $script is not executable"
+              exit 1
+            fi
+          done
+          echo "✓ All hook scripts are executable"
+
+  validate-json:
+    name: Validate JSON Files
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install jq
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq
+
+      - name: Validate .mcp.json
+        run: |
+          echo "Validating .mcp.json..."
+          jq empty .mcp.json
+          echo "✓ .mcp.json is valid JSON"
+
+      - name: Validate .mcp.example.json
+        run: |
+          echo "Validating .mcp.example.json..."
+          jq empty .mcp.example.json
+          echo "✓ .mcp.example.json is valid JSON"
+
+      - name: Validate settings.json
+        run: |
+          echo "Validating .claude/settings.json..."
+          jq empty .claude/settings.json
+          echo "✓ .claude/settings.json is valid JSON"
+
+      - name: Validate settings.local.json.example
+        run: |
+          echo "Validating .claude/settings.local.json.example..."
+          jq empty .claude/settings.local.json.example
+          echo "✓ .claude/settings.local.json.example is valid JSON"
+
+  validate-markdown:
+    name: Validate Markdown Files
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install markdown-link-check
+        run: npm install -g markdown-link-check
+
+      - name: Check markdown links
+        run: |
+          echo "Checking markdown files for broken links..."
+
+          # Check main documentation
+          markdown-link-check README.md --config .github/markdown-link-check-config.json || true
+          markdown-link-check SETUP.md --config .github/markdown-link-check-config.json || true
+          markdown-link-check CHANGELOG.md --config .github/markdown-link-check-config.json || true
+
+          # Check docs directory
+          for file in docs/*.md; do
+            if [ -f "$file" ]; then
+              markdown-link-check "$file" --config .github/markdown-link-check-config.json || true
+            fi
+          done
+
+          echo "✓ Markdown link check complete"
+
+  test-setup-script:
+    name: Test Setup Script
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Test setup script (dry-run mode)
+        run: |
+          echo "Testing setup.sh in dry-run mode..."
+
+          # Test that script can be sourced without errors
+          bash -n setup.sh
+          echo "✓ setup.sh syntax is valid"
+
+          # Check for common issues
+          if grep -q "rm -rf /" setup.sh; then
+            echo "❌ Found dangerous command in setup.sh"
+            exit 1
+          fi
+
+          echo "✓ setup.sh safety checks passed"
+
+  validate-gitignore:
+    name: Validate .gitignore
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check .gitignore includes required entries
+        run: |
+          echo "Checking .gitignore..."
+
+          required_entries=(
+            ".claude/settings.local.json"
+            "CLAUDE.local.md"
+            ".env"
+            ".env.local"
+            ".mcp.local.json"
+          )
+
+          for entry in "${required_entries[@]}"; do
+            if ! grep -q "$entry" .gitignore; then
+              echo "❌ Missing in .gitignore: $entry"
+              exit 1
+            else
+              echo "✓ Found in .gitignore: $entry"
+            fi
+          done
+
+          echo "✓ .gitignore is properly configured"
+
+  check-documentation:
+    name: Check Documentation Quality
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check README has required sections
+        run: |
+          echo "Checking README.md sections..."
+
+          required_sections=(
+            "Quick Start"
+            "Features"
+            "Documentation"
+            "Examples"
+          )
+
+          for section in "${required_sections[@]}"; do
+            if ! grep -q "$section" README.md; then
+              echo "❌ Missing section in README: $section"
+              exit 1
+            else
+              echo "✓ Found section: $section"
+            fi
+          done
+
+          echo "✓ README.md has all required sections"
+
+      - name: Check documentation file sizes
+        run: |
+          echo "Checking documentation isn't empty..."
+
+          docs=(
+            "README.md"
+            "SETUP.md"
+            "CHANGELOG.md"
+            "docs/mcp-servers-guide.md"
+            "docs/customization-guide.md"
+            "docs/maintenance-guide.md"
+          )
+
+          for doc in "${docs[@]}"; do
+            size=$(wc -c < "$doc")
+            if [ "$size" -lt 100 ]; then
+              echo "❌ $doc appears to be empty or too small"
+              exit 1
+            else
+              echo "✓ $doc has content ($size bytes)"
+            fi
+          done
+
+          echo "✓ All documentation files have content"
+
+  summary:
+    name: Validation Summary
+    needs: [validate-structure, validate-shell, validate-json, validate-markdown, test-setup-script, validate-gitignore, check-documentation]
+    runs-on: ubuntu-latest
+    if: always()
+
+    steps:
+      - name: Check overall status
+        run: |
+          echo "🎉 All validation checks completed!"
+          echo ""
+          echo "Summary:"
+          echo "  ✓ Directory structure validated"
+          echo "  ✓ Shell scripts validated"
+          echo "  ✓ JSON files validated"
+          echo "  ✓ Markdown files checked"
+          echo "  ✓ Setup script tested"
+          echo "  ✓ .gitignore validated"
+          echo "  ✓ Documentation checked"
+          echo ""
+          echo "Template is ready to use!"

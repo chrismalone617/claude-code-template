@@ -27,7 +27,7 @@ Choose one of these methods:
 #### Method A: Clone for a New Project
 ```bash
 # Clone the template
-git clone https://github.com/yourusername/claude-code-template my-project
+git clone https://github.com/chrismalone617/claude-code-template my-project
 cd my-project
 
 # Optional: Remove git history for fresh start
@@ -422,7 +422,7 @@ Now that setup is complete:
 ## Getting Help
 
 - **Documentation Issues:** Check the [docs/](docs/) directory
-- **Template Issues:** [Open an issue](https://github.com/yourusername/claude-code-template/issues)
+- **Template Issues:** [Open an issue](https://github.com/chrismalone617/claude-code-template/issues)
 - **Claude Code Issues:** [Claude Code GitHub](https://github.com/anthropics/claude-code/issues)
 - **MCP Server Issues:** Check individual server documentation
 
@@ -432,7 +432,7 @@ To get updates to the template:
 
 ```bash
 # Add template as remote
-git remote add template https://github.com/yourusername/claude-code-template
+git remote add template https://github.com/chrismalone617/claude-code-template
 git fetch template
 
 # Merge updates (resolve conflicts as needed)

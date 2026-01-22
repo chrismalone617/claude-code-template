@@ -1,0 +1,23 @@
+{
+  "ignorePatterns": [
+    {
+      "pattern": "^https://github.com/yourusername/"
+    },
+    {
+      "pattern": "^https://api.example.com"
+    },
+    {
+      "pattern": "^https://example.com"
+    },
+    {
+      "pattern": "^http://localhost"
+    }
+  ],
+  "replacementPatterns": [],
+  "httpHeaders": [],
+  "timeout": "10s",
+  "retryOn429": true,
+  "retryCount": 3,
+  "fallbackRetryDelay": "5s",
+  "aliveStatusCodes": [200, 206, 301, 302, 307, 308]
+}
