@@ -43,7 +43,7 @@ prompt_yes_no() {
     prompt="$prompt [y/N]: "
   fi
 
-  read -p "$prompt" response
+  read -r -p "$prompt" response
   response=${response:-$default}
 
   [[ "$response" =~ ^[Yy] ]]
@@ -143,9 +143,7 @@ print_header "Project Configuration"
 if [ -f ".claude/CLAUDE.md" ]; then
   if prompt_yes_no "Customize .claude/CLAUDE.md for this project?"; then
     echo ""
-    read -p "Project name: " PROJECT_NAME
-    read -p "Project description: " PROJECT_DESC
-    read -p "Primary language (e.g., TypeScript): " PRIMARY_LANG
+    read -r -p "Project description: " PROJECT_DESC
 
     # Update CLAUDE.md with project info
     sed -i.bak "s/\[Describe your project here\]/$PROJECT_DESC/" .claude/CLAUDE.md 2>/dev/null || \

@@ -4,10 +4,9 @@
   "_note": "Copy this to settings.local.json and customize",
 
   "permissions": {
-    "_comment": "Personal permission overrides",
+    "_comment": "Personal permission overrides - add your personal tools and blocked paths",
     "allowedCommands": {
       "bash": [
-        "_note": "Add personal tools here",
         "vim",
         "nvim",
         "emacs",
@@ -15,7 +14,6 @@
       ]
     },
     "blockedPaths": [
-      "_note": "Add personal paths to block",
       "~/secrets/**",
       "~/personal/**"
     ]
